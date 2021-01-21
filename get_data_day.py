@@ -36,7 +36,7 @@ if (bConnect == 0):
 
 # 일자별 object 구하기
 objStockWeek = win32com.client.Dispatch("DsCbo1.StockWeek")
-objStockWeek.SetInputValue(0, 'A011210')  # 종목 코드 - 삼성전자, 현대위아
+objStockWeek.SetInputValue(0, 'A005930')  # 종목 코드 - 삼성전자, 현대위아
 
 # 최초 데이터 요청
 ret = ReqeustData(objStockWeek)
