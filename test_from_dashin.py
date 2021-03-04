@@ -2,7 +2,10 @@ import sys
 from PyQt5.QtWidgets import *
 import win32com.client
 import ctypes
+import pandas as pd
 
+import date_set
+today = date_set.today(0)
 ################################################
 # PLUS 공통 OBJECT
 g_objCodeMgr = win32com.client.Dispatch('CpUtil.CpCodeMgr')
@@ -94,19 +97,95 @@ class CMarketTotal():
             objMarket.Request(rqCodeList, self.dataInfo)
 
     def PrintMarketTotal(self):
-
+        global df
         # 시가총액 순으로 소팅
         data2 = sorted(self.dataInfo.items(), key=lambda x: x[1][1], reverse=True)
+        df = pd.DataFrame(data2)
 
         print('전종목 시가총액 순 조회 (%d 종목)' % (len(data2)))
+
+        names = []
+        num_stocks = []
+        caps =[]
         for item in data2:
             name = g_objCodeMgr.CodeToName(item[0])
             listed = item[1][0]
             markettot = item[1][1]
             print('%s 상장주식수: %s, 시가총액 %s' % (name, format(listed, ','), format(markettot, ',')))
+            names.append(name)
+            num_stocks.append(listed)
+            caps.append(markettot)
+
+        df = df.rename(columns= {0:'Ticker', 1:'temp'})
+        df['name'] = names
+        df['num_stock'] = num_stocks
+        df['cap'] = caps
+        df['Date'] = today
+        df = df.drop(columns='temp')
+        df = df[['Ticker','Date','cap','num_stock','name']]
+        print(df)
+
+
+
 
 
 if __name__ == "__main__":
     objMarketTotal = CMarketTotal()
     objMarketTotal.GetAllMarketTotal()
     objMarketTotal.PrintMarketTotal()
+
+    import pandas as pd
+    import pymysql
+
+    import time
+    from sqlalchemy import create_engine
+
+    pw = '0000'
+    ip_public = '13.209.4.191'
+    port = '3306'
+    db_name = 'ssiaat_shin'
+
+    engine = create_engine("mysql+pymysql://root:" + pw + f"@{ip_public}:{port}/{db_name}?charset=utf8",
+                           encoding='utf-8')
+
+    item_tb = 'listed_cap'
+
+
+    def TableCreater(item_tb):
+        print(f''' make Table''')
+        conn = pymysql.connect(host=ip_public, port=3306, user='root', password=pw, db=db_name,
+                               charset='utf8')
+        with conn.cursor() as curs:
+            sql = f"""
+                CREATE TABLE {item_tb} (
+                Ticker VARCHAR(30) NOT NULL,
+                Date Date NOT NULL,
+                cap VARCHAR(64) NOT NULL,
+                num_stock VARCHAR(64) NOT NULL,
+                name VARCHAR(64) NOT NULL,
+                );
+                """
+            # PRIMARY KEY(Ticker, Date)
+            # Date DATE NOT NULL,
+            curs.execute(sql)
+            print(f'{sql}')
+            conn.commit()
+            codes = dict()
+            conn.close()
+    try:
+        TableCreater(item_tb)
+    except Exception as e:
+        print(f'{e}')
+        # 기존테이블 전체 삭제 후 업데이트
+        conn1 = pymysql.connect(host='13.209.4.191', port=3306, user='root', password='0000', db='ssiaat_shin',
+                                charset='utf8')
+        query0 = 'USE ssiaat_shin;'
+        query1 = f'TRUNCATE TABLE {item_tb};'
+        curs = conn1.cursor()
+        curs.execute(query0)
+        curs.execute(query1)
+
+    try:
+        df.to_sql(name=item_tb, con=engine, if_exists='append', index=False)
+    except Exception as e:
+        print(f'{e}_____Failed to bulkdf 2 EC2 insert')

@@ -5,7 +5,7 @@ import time
 from sqlalchemy import create_engine
 
 pw ='0000'
-ip_public = '3.35.27.15'
+ip_public = '13.209.4.191'
 port = '3306'
 db_name = 'ssiaat_shin'
 

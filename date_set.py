@@ -9,4 +9,4 @@ def today(backday):
     today = what_date1
     return today
 
-#print(today(-1))
+#print(today(0))

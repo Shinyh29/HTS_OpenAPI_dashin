@@ -73,7 +73,7 @@ from sqlalchemy import create_engine
 
 item_tb = 'tickers'
 pw ='0000'
-ip_public = '3.35.27.15'
+ip_public = '13.209.4.191'
 port = '3306'
 db_name = 'ssiaat_shin'
 engine = create_engine("mysql+pymysql://root:" + pw + f"@{ip_public}:{port}/{db_name}?charset=utf8",
