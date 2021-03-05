@@ -28,7 +28,7 @@ date_list = []
 data_list1 = []
 data_list2 = []
 data_list3 = []
-
+data_list4 = []
 
 ## 1 회
 import pandas as pd
@@ -39,12 +39,13 @@ for i in range(count):
     data_list1.append(inCpSvr7254.GetDataValue(1, i))
     data_list2.append(inCpSvr7254.GetDataValue(2, i))
     data_list3.append(inCpSvr7254.GetDataValue(3, i))
+    data_list4.append(inCpSvr7254.GetDataValue(4, i))
 
 df['Date'] = date_list
 df['indiv'] = data_list1
 df['foreign'] = data_list2
 df['instit'] = data_list3
-
+df['invest'] = data_list4
 
 
 sum_count = 0
@@ -67,10 +68,14 @@ while inCpSvr7254.Continue:
         data_list1.append( inCpSvr7254.GetDataValue(1, i) )
         data_list2.append( inCpSvr7254.GetDataValue(2, i) )
         data_list3.append( inCpSvr7254.GetDataValue(3, i) )
+        data_list4.append(inCpSvr7254.GetDataValue(4, i))
 
     df['Date'] = date_list
     df['indiv'] = data_list1
     df['foreign'] = data_list2
     df['instit'] = data_list3
+    df['invest'] = data_list4
 
 print(df)
+
+### 이걸  이제  sql 으로 집어넣자  대상종목은  5천억 이상 500여종목
