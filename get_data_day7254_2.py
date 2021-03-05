@@ -12,11 +12,14 @@ def subCpSvr7254(m_code, m_FromDate, m_ToDate):
    # ## 대신 API 세팅
     cpSvr7254 = win32com.client.Dispatch("CpSysDib.CpSvr7254")
     cpSvr7254.SetInputValue(0, m_code)       # 종목코드
-    cpSvr7254.SetInputValue(1, '0')          # 기간선택 0:기간선택, 1:1개월, ... , 4:6개월
+    cpSvr7254.SetInputValue(1, 0)          # 1 - (short) 기간선택구분 (0:사용자지정 1:1개,월, 2:2개월 3:3개월 4:6개월,5:최근5일 6:일별)
     cpSvr7254.SetInputValue(2, m_FromDate)  # 시작일자
     cpSvr7254.SetInputValue(3, m_ToDate)    # 끝일자
     cpSvr7254.SetInputValue(4, '0')         # 0:순매수 1:비중
-    cpSvr7254.SetInputValue(5, '0')         # 투자자
+    cpSvr7254.SetInputValue(5, 0)         # 투자자
+
+
+
     cpSvr7254.BlockRequest()
 
     numData=cpSvr7254.GetHeaderValue(1)
@@ -52,7 +55,7 @@ if __name__ == "__main__":
     # max rows request : 250 일 .  :: 1y ?
     #  from , toDate 를 수정해야함
     code='A005930'        # 삼성전자 코드  #
-    fromDate = date_set.today(-300) # 요청 시작 날짜
+    fromDate = date_set.today(-20) # 요청 시작 날짜
     toDate = date_set.today(-1)   # 요청 마지막 날짜
     print(f'from {fromDate} ~ to {toDate}')
     # ### 자료가져오기
