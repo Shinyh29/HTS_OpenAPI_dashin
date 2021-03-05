@@ -50,7 +50,7 @@ objStockChart.SetInputValue(0, 'A005930')  # 종목 코드 - 삼성전자
 objStockChart.SetInputValue(1, ord('1'))  # 날짜로 조회
 
 objStockChart.SetInputValue(2, 0)  # 종료 날짜, 0을 넣으면 가장 최근 날짜로 불러옴.
-objStockChart.SetInputValue(3, 20210219)  # 시작 날짜, 3월 1일로  설정하였음.
+objStockChart.SetInputValue(3, 20150101)  # 시작 날짜, 3월 1일로  설정하였음.
 
 objStockChart.SetInputValue(5, [0, 2, 3, 4, 5, 8, 9, 12,13,17,20,21])  # 날짜, 시가, 고가, 저가, 종가, 거래량, 거래대금
 """

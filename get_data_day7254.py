@@ -16,7 +16,7 @@ g_objCodeMgr = win32com.client.Dispatch('CpUtil.CpCodeMgr')
 g_objCpStatus = win32com.client.Dispatch('CpUtil.CpCybos')
 g_objCpTrade = win32com.client.Dispatch('CpTrade.CpTdUtil')
 
-gExcelFile = '7254.xlsx'
+#gExcelFile = '7254.xlsx'
 
 
 class CpRp7354:
@@ -44,6 +44,7 @@ class CpRp7354:
 
         while True:
             remainCount = g_objCpStatus.GetLimitRemainCount(1)  # 1 시세 제한
+            print(f'시세제한 : {remainCount}')
             if remainCount <= 0:
                 print('시세 연속 조회 제한 회피를 위해 sleep', g_objCpStatus.LimitRequestRemainTime)
                 time.sleep(g_objCpStatus.LimitRequestRemainTime / 1000)
@@ -78,7 +79,7 @@ class CpRp7354:
 
                 data7254.loc[len(data7254)] = item
 
-            # 1000 개 정도만 처리
+            # 1000 개 정도만 처리 -> 한도까지 ?
             if sumcnt > 1000:
                 break;
             # 연속 처리
@@ -99,4 +100,3 @@ data7254 = DataFrame()
 #obj7254.Request('A005930', caller.data7254 )
 
 print(CpRp7354.Request(self= None, code="A005930"))
-
