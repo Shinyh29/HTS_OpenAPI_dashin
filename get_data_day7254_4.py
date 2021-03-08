@@ -8,8 +8,8 @@ import pandas
 import numpy
 import pandas as pd
 pd.set_option('display.max_columns', 100)
-
-
+import window_control
+import os
 #code = '005930'
 
 def get_netbuy(code, who ,num):
@@ -64,6 +64,7 @@ def get_netbuy(code, who ,num):
         count = inCpSvr7254.GetHeaderValue(1)
         sum_count += count
         print(f'count : {sum_count}')
+        window_control.close_window_titlenm(titlenm='CPSYSDIB')
         if sum_count > num:
             break;
 
@@ -75,10 +76,19 @@ def get_netbuy(code, who ,num):
 
         df['Date'] = date_list
         df['netbuy_foreign'] = data_list10
+
+
+
     df['Ticker'] = Ticker
     df = df[['Ticker', 'Date', 'netbuy_foreign']]
-    df['Date']= apply(lambda x: pd.to_datetime(str(x), format='%Y%m%d'))
-
+    table_nm = 'netbuy_foreign'
+    df.rename(columns={"netbuy_foreign": "Value"}, inplace=True)
+    df = df.iloc[1::]  # 하루전날 부터 받음  : Date 제대로 나오지 않음
+    try:
+        df['Date']= pd.to_datetime(df['Date'].astype(str), format='%Y-%m-%d')
+    except Exception as e:
+        print(f'{e}-----------Date_convert Err')
+    print(f'--------------table_nm : {table_nm}')
     #print(pd.to_datetime(df['Date'], format= '%Y-%m-%d') )
 
     return df
@@ -104,67 +114,24 @@ who
 5 - (short)  투자자
 
 코드
-
 내용
-
-0
-
-전체
-
-1
-
-개인
-
-2
-
-외국인
-
-3
-
-기관계
-
-4
-
-금융투자
-
-5
-
-보험
-
-6
-
-투신
-
-7
-
-은행
-
-8
-
-기타금융
-
-9
-
-연기금
-
-10
-
-국가지자체
-
-11
-
-기타외인
-
-12
-
-사모펀드
-
-13
-
-기타법인
+0전체
+1개인
+2외국인
+3기관계
+4금융투자
+5보험
+6투신
+7은행
+8기타금융
+9연기금
+10국가지자체
+11기타외인
+12사모펀드
+13기타법인
 
 
 
 """
 
-print(get_netbuy( code = '005930', who=2 ,num = 19))
+#print(get_netbuy( code = '005930', who=2 ,num = 19))

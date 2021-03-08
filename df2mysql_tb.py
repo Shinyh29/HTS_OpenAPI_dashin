@@ -9,10 +9,12 @@ ip_public = '13.209.4.191'
 port = '3306'
 db_name = 'ssiaat_shin'
 
+
 engine = create_engine("mysql+pymysql://root:" + pw + f"@{ip_public}:{port}/{db_name}?charset=utf8",
                            encoding='utf-8')
 
-item_tb = 'tickers'
+item_tb = "netbuy_foreign"
+#'tickers'
 
 
 def TableCreater(item_tb):
@@ -23,12 +25,13 @@ def TableCreater(item_tb):
         sql = f"""
         CREATE TABLE {item_tb} (
         Ticker VARCHAR(30) NOT NULL,
-        Market VARCHAR(3) NOT NULL
+        Date DATE NOT NULL,
         Value VARCHAR(64) NOT NULL,
+        
+        PRIMARY KEY(Ticker, Date)
         );
         """
-        #PRIMARY KEY(Ticker, Date)
-        # Date DATE NOT NULL,
+        # Market VARCHAR(3) NOT NULL
         curs.execute(sql)
         print(f'{sql}')
         conn.commit()
