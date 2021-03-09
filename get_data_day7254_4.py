@@ -12,6 +12,12 @@ import window_control
 import os
 #code = '005930'
 
+item_tb = 'netbuy_instit'
+#table_nm = item_tb
+# 순매수대금_외국인 : netbuy_foreign  who = 2
+# 순매수대금_기관계 : netbuy_instit   who =
+
+
 def get_netbuy(code, who ,num):
     # code : 티커
     # who : 투자자
@@ -22,7 +28,7 @@ def get_netbuy(code, who ,num):
     inCpSvr7254.SetInputValue(0, Ticker)
     inCpSvr7254.SetInputValue(1, 6)
     inCpSvr7254.SetInputValue(2, 20210101)
-    inCpSvr7254.SetInputValue(3, 20210304)
+    inCpSvr7254.SetInputValue(3, 20210308)
     inCpSvr7254.SetInputValue(4, '0')
 
     inCpSvr7254.SetInputValue(5, who)   # 5 - (short)  투자자
@@ -75,20 +81,20 @@ def get_netbuy(code, who ,num):
             data_list10.append(inCpSvr7254.GetDataValue(10, i))
 
         df['Date'] = date_list
-        df['netbuy_foreign'] = data_list10
+        df[f'{item_tb}'] = data_list10
 
 
 
     df['Ticker'] = Ticker
-    df = df[['Ticker', 'Date', 'netbuy_foreign']]
-    table_nm = 'netbuy_foreign'
-    df.rename(columns={"netbuy_foreign": "Value"}, inplace=True)
+    df = df[['Ticker', 'Date', f'{item_tb}']]
+
+    df.rename(columns={f'{item_tb}': "Value"}, inplace=True)
     df = df.iloc[1::]  # 하루전날 부터 받음  : Date 제대로 나오지 않음
     try:
         df['Date']= pd.to_datetime(df['Date'].astype(str), format='%Y-%m-%d')
     except Exception as e:
         print(f'{e}-----------Date_convert Err')
-    print(f'--------------table_nm : {table_nm}')
+    #print(f'--------------table_nm : {item_tb}')
     #print(pd.to_datetime(df['Date'], format= '%Y-%m-%d') )
 
     return df
@@ -134,4 +140,4 @@ who
 
 """
 
-#print(get_netbuy( code = '005930', who=2 ,num = 19))
+#print(get_netbuy( code = '005930', who=2 ,num = 30))

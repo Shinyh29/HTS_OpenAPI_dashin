@@ -66,6 +66,9 @@ for u in tickers:
         idx += 1
         print(idx, u, get_ticker2nm(u))
 
+    elif "Q" in u:
+        idx += 1
+        print(idx, u, get_ticker2nm(u))
     else:
         stocks.append(u)
 
@@ -73,14 +76,55 @@ print(f'len[stocks]  : {len(stocks)}')
 print(stocks)
 
 
-item_tb = 'netbuy_foreign'
+item_tb = 'netbuy_instit'
+def get_item_tb(who):
+    if who == 2:
+        item_tb = 'netbuy_foreign'
+    elif who == 3:
+        item_tb = 'netbuy_instit'
+    return item_tb
+
+# 순매수대금_외국인 : netbuy_foreign
+# 순매수대금_기관계 : netbuy_instit
+
 import get_data_day7254_4
 
-for idx, code in enumerate(stocks[4::]):
-    print(f'-------------{idx}/{len(stocks)}: {code},  {get_ticker2nm(code)}')
+stocks_idx = 0
+who_list = [2,3]
+
+
+for idx, code in enumerate(stocks[stocks_idx::]):
+    print(f'-------------{stocks_idx + idx}/{len(stocks)}: {code},  {get_ticker2nm(code)}')
     code = code.replace("A","")
-    unit_df = get_data_day7254_4.get_netbuy( code = code, who=2 ,num =4300 )
+    who = 2
+    item_tb = get_item_tb(who= who)
+    print(f'--------------------- item_tb : {item_tb}')
+    unit_df = get_data_day7254_4.get_netbuy( code = code, who=who ,num =30 )
     # let 4000일  == 20년치
+    """
+    who : 를 바꾸면 item_tb 도 바꾸어야함
+    5 - (short)  투자자
+
+    코드
+    내용
+    0전체
+    1개인
+    2외국인  
+    3기관계
+    4금융투자
+    5보험
+    6투신
+    7은행
+    8기타금융
+    9연기금
+    10국가지자체
+    11기타외인
+    12사모펀드
+    13기타법인
+
+
+
+    """
     try:
         unit_df = unit_df.reset_index(drop=False)
     except:
@@ -96,7 +140,7 @@ for idx, code in enumerate(stocks[4::]):
     ## if
 
     sql = f"""
-    SELECT * FROM ssiaat_shin.netbuy_foreign WHERE Ticker = 'A{code}' ORDER BY netbuy_foreign.Date DESC;
+    SELECT * FROM ssiaat_shin.{item_tb} WHERE Ticker = 'A{code}' ORDER BY {item_tb}.Date DESC;
     """
     read_unit_df = pd.read_sql(sql, con=conn)
 
