@@ -84,7 +84,7 @@ import StockChart_get_day
 
 from tqdm import tqdm
 
-for idx, ticker in enumerate(stocks[0:5]):
+for idx, ticker in enumerate(stocks):
     unit_df = pd.DataFrame()
     df = StockChart_get_day.get_chart_daily(code=ticker, start_date='20000101')
     df = df.reset_index()
@@ -92,7 +92,7 @@ for idx, ticker in enumerate(stocks[0:5]):
 
     table_nms = df.keys().tolist()
     for table_nm in table_nms:
-        if table_nm in ['Date','Open', 'High', 'Low',  'Volume', 'netbuy_instit']:
+        if table_nm in ['Ticker','Date','Open', 'High', 'Low',  'Volume', 'netbuy_instit']:
             # 첫번째 호출  " 이유를 알수없는 Ticker NaN
             None
         else:
@@ -106,7 +106,8 @@ for idx, ticker in enumerate(stocks[0:5]):
             unit_df = df[['Ticker','Date',table_nm]]
             print(unit_df)
             #unit_df = unit_df[['Ticker','Date',table_nm]]
-            #unit_df.rename(columns={table_nm: "Value"},inplace = True)
+            unit_df.rename(columns={table_nm: "Value"},inplace = True)
+            unit_df.columns = unit_df.columns.to_series().apply(lambda x: x.strip() )
             #unit_df['Ticker'] = ticker
             #unit_df.rename(columns={table_nm : "Value"}, inplace=True)
             #unit_df['Value'] = df[f'{table_nm}']
@@ -125,11 +126,13 @@ for idx, ticker in enumerate(stocks[0:5]):
                     unit_df = unit_df.reset_index(drop=False)
                 except:
                     None
-                try:
-                    unit_df = unit_df[['Ticker', 'Date', 'Value']]
-                    unit_df = unit_df.drop(['index'],axis=1)
-                except:
-                    None
+
+                unit_df.columns = unit_df.columns.to_series().apply(lambda x: x.strip())
+                print(unit_df)
+                unit_df = unit_df[['Ticker', 'Date', 'Value']]
+                #unit_df = unit_df.drop(['index'],axis=1)
+
+
                 print('-----------------unit_df')
                 print(unit_df)
                 # pk 따라서  Ticker, Date 겹치는것 있으면
@@ -158,8 +161,8 @@ for idx, ticker in enumerate(stocks[0:5]):
 
                 # --------------------insert : df 2 table
                 try:
-                    None
-                    #temp_df.to_sql(name=f'{table_nm}', con=conn, if_exists='append', index=False)
+                    #None
+                    temp_df.to_sql(name=f'{table_nm}', con=conn, if_exists='append', index=False)
                 except Exception as e:
                     print(f'{e} ______ Failed to unit_df 2 EC2 insert')
 
