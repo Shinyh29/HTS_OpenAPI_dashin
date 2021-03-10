@@ -12,10 +12,11 @@ import window_control
 import os
 #code = '005930'
 
-item_tb = 'netbuy_instit'
+item_tb = 'rate_foreign'
 #table_nm = item_tb
-# 순매수대금_외국인 : netbuy_foreign  who = 2
-# 순매수대금_기관계 : netbuy_instit   who =
+# 순매수대금_외국인 : netbuy_foreign  who = 2, param = 7
+# 순매수대금_기관계 : netbuy_instit   who = 3, param = 7
+# 외국인비율 : rate_foreign who = 2, param = 8 ?
 
 
 def get_netbuy(code, who ,num):
@@ -58,6 +59,16 @@ def get_netbuy(code, who ,num):
     for i in range(count):
         # print("-----------------------------")
         date_list.append(inCpSvr7254.GetDataValue(0, i))
+        # data_list1.append(inCpSvr7254.GetDataValue(1, i))  ## 일별 순매수 금액
+        # data_list2.append(inCpSvr7254.GetDataValue(2, i))  ## 일별 순매수 금액
+        # data_list3.append(inCpSvr7254.GetDataValue(3, i))  ## 일별 순매수 금액
+        # data_list4.append(inCpSvr7254.GetDataValue(4, i))  ## 일별 순매수 금액
+        # data_list5.append(inCpSvr7254.GetDataValue(5, i))  ## 일별 순매수 금액
+        # data_list6.append(inCpSvr7254.GetDataValue(6, i))  ## 일별 순매수 금액
+        # data_list7.append(inCpSvr7254.GetDataValue(7, i))  ## 일별 순매수 금액
+        # data_list8.append(inCpSvr7254.GetDataValue(8, i))  ## 일별 순매수 금액
+        # data_list9.append(inCpSvr7254.GetDataValue(9, i))  ## 일별 순매수 금액
+        #data_list10.append(inCpSvr7254.GetDataValue(10, i))  ## 일별 순매수 금액
         data_list10.append(inCpSvr7254.GetDataValue(10, i))  ## 일별 순매수 금액
 
     sum_count = 0
@@ -78,7 +89,18 @@ def get_netbuy(code, who ,num):
         for i in range(count):
             #print("-----------------------------")
             date_list.append( inCpSvr7254.GetDataValue(0, i) )
+            # data_list1.append(inCpSvr7254.GetDataValue(1, i))
+            # data_list2.append(inCpSvr7254.GetDataValue(2, i))
+            # data_list3.append(inCpSvr7254.GetDataValue(3, i))
+            # data_list4.append(inCpSvr7254.GetDataValue(4, i))
+            # data_list5.append(inCpSvr7254.GetDataValue(5, i))
+            # data_list6.append(inCpSvr7254.GetDataValue(6, i))
+            # data_list7.append(inCpSvr7254.GetDataValue(7, i))
+            # data_list8.append(inCpSvr7254.GetDataValue(8, i))
+            # data_list9.append(inCpSvr7254.GetDataValue(9, i))
             data_list10.append(inCpSvr7254.GetDataValue(10, i))
+
+            #data_list10.append(inCpSvr7254.GetDataValue(10, i)) 일별순매수금액
 
         df['Date'] = date_list
         df[f'{item_tb}'] = data_list10
@@ -140,4 +162,4 @@ who
 
 """
 
-#print(get_netbuy( code = '005930', who=2 ,num = 30))
+print(get_netbuy( code = '005930', who=2 ,num = 30))

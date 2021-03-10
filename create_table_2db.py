@@ -11,10 +11,11 @@ db_name = 'ssiaat_shin'
 engine = create_engine("mysql+pymysql://root:" + pw + f"@{ip_public}:{port}/{db_name}?charset=utf8",
                            encoding='utf-8')
 
-item_tb = 'netbuy_instit'
+item_tb = 'rate_foreign'
 # 기관 netbuy_instit
 # 개인 netbuy_indiv
 # 외국인 netbuy_foreign
+# 외국인보유비율 rate_foreign
 
 def TableCreater(item_tb):
     print(f''' make Table''')
