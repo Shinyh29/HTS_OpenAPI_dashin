@@ -11,7 +11,7 @@ db_name = 'ssiaat_shin'
 engine = create_engine("mysql+pymysql://root:" + pw + f"@{ip_public}:{port}/{db_name}?charset=utf8",
                            encoding='utf-8')
 
-item_tb = 'rate_foreign'
+item_tb = 'cap'
 # 기관 netbuy_instit
 # 개인 netbuy_indiv
 # 외국인 netbuy_foreign
@@ -26,7 +26,7 @@ def TableCreater(item_tb):
         CREATE TABLE {item_tb} (
         Ticker VARCHAR(30) NOT NULL,
         Date Date NOT NULL,
-        Value VARCHAR(64) NOT NULL,
+        Value VARCHAR(128) NOT NULL,
         PRIMARY KEY(Ticker, Date)
         );
         """
