@@ -3,11 +3,13 @@ from pywinauto import application
 import os
 import time
 
+os.system('taskkill /IM CPSTART /F /T') ## 이렇게 해도 안됨  어떻게 끄지
 os.system('taskkill /IM ncStarter* /F /T')
 os.system('taskkill /IM CpStart* /F /T')
 os.system('taskkill /IM DibServer* /F /T')
 
 # wmic : window 시스템 정보를 조회, 변경 강제종료 신호 받으면 확인창 띄워서 한번다 프로세스 종료함.
+os.system('wmic process where "name like \'%CPSTART%'" call terminate")
 os.system('wmic process where "name like \'%ncStarter%'" call terminate")
 os.system('wmic process where "name like \'%CpStart%'" call terminate")
 os.system('wmic process where "name like \'%DibServer%'" call terminate")

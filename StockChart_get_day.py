@@ -2,7 +2,7 @@ import win32com.client
 import pandas as pd
 pd.set_option('display.max_columns', 100)
 
-ticker = "A005930"
+ticker = "A035420"
 
 
 # 연결 여부 체크

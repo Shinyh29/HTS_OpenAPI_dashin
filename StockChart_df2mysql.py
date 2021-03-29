@@ -83,16 +83,17 @@ import StockChart_get_day
 
 
 from tqdm import tqdm
+import date_set
 
 for idx, ticker in enumerate(stocks):
     unit_df = pd.DataFrame()
-    df = StockChart_get_day.get_chart_daily(code=ticker, start_date='20000101')
+    df = StockChart_get_day.get_chart_daily(code=ticker, start_date= date_set.today(-5000) ) #'20000101')
     df = df.reset_index()
     df['Ticker'] = ticker
 
     table_nms = df.keys().tolist()
     for table_nm in table_nms:
-        if table_nm in ['Ticker','Date','Open', 'High', 'Low',  'Volume', 'netbuy_instit']:
+        if table_nm in ['Ticker','Date','Open', 'High', 'Low',  'Volume']: #, 'netbuy_instit']:
             # 첫번째 호출  " 이유를 알수없는 Ticker NaN
             None
         else:
@@ -128,13 +129,13 @@ for idx, ticker in enumerate(stocks):
                     None
 
                 unit_df.columns = unit_df.columns.to_series().apply(lambda x: x.strip())
-                print(unit_df)
+                #print(unit_df.tail())
                 unit_df = unit_df[['Ticker', 'Date', 'Value']]
                 #unit_df = unit_df.drop(['index'],axis=1)
 
 
                 print('-----------------unit_df')
-                print(unit_df)
+                print(unit_df.tail())
                 # pk 따라서  Ticker, Date 겹치는것 있으면
                 ## read_sql ascending True ->  과거값이 위로
                 ## if
@@ -144,6 +145,7 @@ for idx, ticker in enumerate(stocks):
                 """
                 read_unit_df = pd.read_sql(sql, con=conn)
 
+                print(f' -----------------------table_nm : {table_nm}')
                 print('-----------------From EC2, read_unit_df')
                 print(read_unit_df)
                 # Date slice 해서 안넣고
@@ -151,6 +153,7 @@ for idx, ticker in enumerate(stocks):
                 ##  isin read_unit_df.Date.tolist()
                 temp_df = get_notin_dates(unit_df, read_unit_df)
                 temp_df = temp_df[['Ticker', 'Date', 'Value']]
+                print(f' -----------------------table_nm : {table_nm}')
                 print(f'--------------------will insert {ticker},  {get_ticker2nm(f"{ticker}")}')
                 print(temp_df)
 
@@ -165,7 +168,8 @@ for idx, ticker in enumerate(stocks):
                     temp_df.to_sql(name=f'{table_nm}', con=conn, if_exists='append', index=False)
                 except Exception as e:
                     print(f'{e} ______ Failed to unit_df 2 EC2 insert')
-
+                for i in tqdm(range(0, 10)):
+                    time.sleep(0.1)
 
     for i in tqdm(range(0, 100)):
         time.sleep(0.1)

@@ -99,8 +99,8 @@ for idx, code in enumerate(stocks[stocks_idx::]):
     who = 2
     item_tb = get_item_tb(who= who)
     print(f'--------------------- item_tb : {item_tb}')
-    unit_df = get_data_day7254_4.get_netbuy( code = code, who=who ,num =30 )
-    # let 4000일  == 20년치
+    unit_df = get_data_day7254_4.get_netbuy( code = code, who=who ,num =5000 )
+    # num:  4000일  == 20년치
     """
     who : 를 바꾸면 item_tb 도 바꾸어야함
     5 - (short)  투자자
