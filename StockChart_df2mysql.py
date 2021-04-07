@@ -168,8 +168,8 @@ for idx, ticker in enumerate(stocks):
                     temp_df.to_sql(name=f'{table_nm}', con=conn, if_exists='append', index=False)
                 except Exception as e:
                     print(f'{e} ______ Failed to unit_df 2 EC2 insert')
-                for i in tqdm(range(0, 10)):
+                for i in tqdm(range(0, 1)):
                     time.sleep(0.1)
 
-    for i in tqdm(range(0, 100)):
+    for i in tqdm(range(0, 1)):  ## 100 에서   시간 너무오래걸려서  다시
         time.sleep(0.1)

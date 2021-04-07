@@ -3,6 +3,8 @@
 import pymysql
 from sqlalchemy import create_engine
 import pandas as pd
+import warnings
+warnings.filterwarnings("ignore")
 
 # conn = pymysql.connect(host='3.35.27.15', port=3306, user='root', password='0000', db='ssiaat_shin',
 # charset='utf8')
@@ -87,20 +89,27 @@ import date_set
 
 table_nm ='lock_info'
 
-for idx, ticker in enumerate(stocks[0:3]):
+for idx, ticker in enumerate(stocks):
     unit_df = pd.DataFrame()
-    df = StockAdj_div.get_chart_daily(code=ticker, start_date= date_set.today(-5000) ) #'20000101')
-    df = df.reset_index()
-    df['Ticker'] = ticker
-    unit_df = df[['Ticker','Date',table_nm]]
-    unit_df.rename(columns={table_nm : "Value"}, inplace=True)
-    unit_df['Value'] = df[f'{table_nm}']
+    try:
+        df = StockAdj_div.get_chart_daily(code=ticker, start_date= date_set.today(-5000) ) #'20000101')
+        df = df.reset_index()
+        df['Ticker'] = ticker
+        unit_df = df[['Ticker','Date',table_nm]]
+        unit_df.rename(columns={table_nm : "Value"}, inplace=True)
+        unit_df['Value'] = df[f'{table_nm}']
 
+        print(f'--------------------{idx}/{len(stocks)}, unit_df :{len(unit_df)}')
+        print(unit_df)
+        try:
+            unit_df.to_sql(name=f'{table_nm}', con=conn, if_exists='append', index=False)
+        except Exception as e:
+            print(f'{e} ______ Failed to unit_df 2 EC2 insert')
+        for i in tqdm(range(0, 10)):
+            time.sleep(0.1)
 
-    print(unit_df.head())
-
-    for i in tqdm(range(0, 10)):
-        time.sleep(0.1)
+    except Exception as e:
+        print(e)
 
     # table_nms = df.keys().tolist()
     # for table_nm in table_nms:

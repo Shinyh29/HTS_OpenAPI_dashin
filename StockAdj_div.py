@@ -3,7 +3,7 @@ import pandas as pd
 pd.set_option('display.max_columns', 100)
 pd.set_option('display.max_rows', 30)
 
-ticker = "A005930"
+ticker = "A350520"
 
 
 # 연결 여부 체크
@@ -106,8 +106,9 @@ def get_chart_daily(code, start_date):
 
     return df
 
-#df = get_chart_daily(code=ticker, start_date="20000101")
-#print(f'-----------------total df : \n \
-#{df}')
-# start_date="20000101" : yyyymmdd
-#print(df.keys().tolist())
+
+# ----------print 할때만 아래 출력
+# df = get_chart_daily(code=ticker, start_date="20000101")
+# print(f'-----------------total df : \n \
+# {df}')
+
