@@ -187,5 +187,6 @@ if __name__ == "__main__":
 
     try:
         df.to_sql(name=item_tb, con=engine, if_exists='append', index=False)
+        #df.to_excel('tickers_all.xlsx')
     except Exception as e:
         print(f'{e}_____Failed to bulkdf 2 EC2 insert')

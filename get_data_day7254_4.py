@@ -29,7 +29,7 @@ def get_netbuy(code, who ,num):
     inCpSvr7254.SetInputValue(0, Ticker)
     inCpSvr7254.SetInputValue(1, 6)
     inCpSvr7254.SetInputValue(2, 20210101)
-    inCpSvr7254.SetInputValue(3, 20210308)
+    inCpSvr7254.SetInputValue(3, 20219999)
     inCpSvr7254.SetInputValue(4, '0')
 
     inCpSvr7254.SetInputValue(5, who)   # 5 - (short)  투자자
@@ -111,7 +111,8 @@ def get_netbuy(code, who ,num):
     df = df[['Ticker', 'Date', f'{item_tb}']]
 
     df.rename(columns={f'{item_tb}': "Value"}, inplace=True)
-    df = df.iloc[1::]  # 하루전날 부터 받음  : Date 제대로 나오지 않음
+    df = df.iloc[0::]  # 하루전날 부터 받음  : Date 제대로 나오지 않음
+    #  if   iloc=  0:  당일 부터  , iloc = 1: 하루전날부터
     try:
         df['Date']= pd.to_datetime(df['Date'].astype(str), format='%Y-%m-%d')
     except Exception as e:
@@ -162,4 +163,4 @@ who
 
 """
 
-print(get_netbuy( code = '005930', who=2 ,num = 30))
+# print(get_netbuy( code = '005930', who=2 ,num = 30))

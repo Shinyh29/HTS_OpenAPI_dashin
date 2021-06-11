@@ -20,4 +20,12 @@ app = application.Application()
 # creon 프로그램 coStarter.exe
 # 크레온 플러스 모드 /prj:cp 로 자동시작.
 # id, pwd, 공인인증서 암호  실행인수로 지정,  후  자동 입력
-app.start('C:\\DAISHIN\\STARTER\\ncStarter.exe /prj:cp /id:shinyh30 /pwd:gksl!310 /pwdcert:tlsdudgks!30 /autostart')
+
+envTrd = 1 # Lets envTrd
+# envTrd = 0 # Lets RealTrd
+
+if envTrd ==0: # Lets RealTrd
+    app.start('C:\\DAISHIN\\STARTER\\ncStarter.exe /prj:cp /id:shinyh30 /pwd:gksl!310 /pwdcert:tlsdudgks!30 /autostart')
+
+elif envTrd ==1: # Lets envTrd
+    app.start('C:\\DAISHIN\\STARTER\\ncStarter.exe /prj:cp /id:shinyh31 /pwd:gksl310 /pwdcert:tlsdudgks!30 /autostart')
