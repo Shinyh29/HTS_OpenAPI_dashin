@@ -385,7 +385,7 @@ if get_balance == 0:
     get_balance = 90000000
 
 # 강제로  Fit 시키기
-get_balance = 120000000
+get_balance = 200000000
 print(f'my balance : {get_balance} ')
 
 # 내가 가진 종목별 수량 체크
