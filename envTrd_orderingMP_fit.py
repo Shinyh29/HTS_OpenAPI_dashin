@@ -285,7 +285,7 @@ def check_ihave():
             print(f" instCPTd6033.Continue : {instCPTd6033.Continue}")
             break
 
-    return df_ihave.reset_index(drop=True, inplace=True)
+    return df_ihave.reset_index(drop=True)
 
 
 
@@ -389,10 +389,8 @@ get_balance = 120000000
 print(f'my balance : {get_balance} ')
 
 # 내가 가진 종목별 수량 체크
-try:
-    df_ihave = check_ihave()
-except Exception as e:
-    print(e)
+df_ihave = check_ihave()
+
 
 print(f'=========== get df_ihave :\n{df_ihave}')
 df = load_signals()
