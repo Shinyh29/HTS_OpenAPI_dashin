@@ -385,15 +385,41 @@ if get_balance == 0:
     get_balance = 90000000
 
 # 강제로  Fit 시키기
-get_balance = 200000000
+# 왜냐하면  모의투자의  6033 Fit 은 정확하지 않음.
+# =>  대신증권 HTS 들어간 후, 화면 6033,  총평가 NAV 평가금액  확인후 넣기가   맞음
+# ( 초기 5억 중  현금 cash 없이 할때 )
+#
+get_balance = 490000000
 print(f'my balance : {get_balance} ')
 
 # 내가 가진 종목별 수량 체크
-df_ihave = check_ihave()
+df_ihave = check_ihave().drop_duplicates(subset="Ticker").reset_index(drop=True)
 
 
 print(f'=========== get df_ihave :\n{df_ihave}')
 df = load_signals()
+df = df[df.Signal != 0].dropna().reset_index(drop=True)
+Tickers_df = df.Ticker.tolist()
+Tickers_df_ihave = df_ihave.Ticker.tolist()
+
+
+for unit_sell in Tickers_df_ihave:
+    if unit_sell not in Tickers_df:
+        ticker = unit_sell
+        try:
+            print(f"Not today port, Sell !: {ticker}")
+            get_px = get_realtime_stock(aws_ticker=ticker)
+            buy_order_qt = 0
+            each_ihave = df_ihave[df_ihave.Ticker == ticker].ihave.values[0]
+            order_delta = math.floor(buy_order_qt) - each_ihave
+            order_fit(ticker=unit_sell, amnt=order_delta, px=get_px)
+        except Exception as e:
+            print(e)
+### 매도 먼저내깃 .  어제는 포트안이었는데, 오늘은 포트 밖인것
+
+
+
+
 print(f'===========Check Point ')
 for idx, row in df.iterrows():
     if row.Signal != 0:
@@ -446,3 +472,5 @@ for idx, row in df.iterrows():
         # 종목별 주문금액
 print(f'==========\n종목전체_주문금액 : {format(each_Buys, ",")} 원')
 
+## 오늘  포트대상인  120 개 종목은 주문나감,
+## 어제는 포트대상이었다가,  오늘 제외된 종목들 주문 안나감
